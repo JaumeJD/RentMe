@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  app:
+    image: php:8.1-apache
+    container_name: rentme-app
+    working_dir: /var/www/html
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./vendor:/var/www/html/vendor
+      - ./node_modules:/var/www/html/node_modules
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+    depends_on:
+      - db
+    command: |
+      apt-get update &&
+      apt-get install -y libzip-dev unzip libonig-dev libxml2-dev &&
+      docker-php-ext-install pdo pdo_mysql zip mbstring bcmath &&
+      apache2-foreground
+
+  db:
+    image: mysql:8.0
+    container_name: rentme-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rentme
+      MYSQL_USER: jaime
+      MYSQL_PASSWORD: jaiminh097
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
