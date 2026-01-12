@@ -11,6 +11,7 @@ export default function UserForm({ user = null }) {
     password: "" 
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => { 
     if (user) setForm({ ...user, password: "" }); 
@@ -32,11 +33,16 @@ export default function UserForm({ user = null }) {
       } else {
         await axios.post(url, form, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
       }
-      fetchUsers();
       navigate("/admin");
     } catch (err) {
       console.error(err);
-      alert("Error al guardar usuario");
+
+      const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+        "Error con el usuario introducido.";
+
+      setError(message)
     } finally {
       setLoading(false);
     }
@@ -44,6 +50,7 @@ export default function UserForm({ user = null }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      {error && <p className="error">{error}</p>}
       <input name="name" value={form.name} onChange={handleChange} placeholder="Nombre" required />
       <input name="email" value={form.email} onChange={handleChange} placeholder="Email" required />
       <select name="role" value={form.role} onChange={handleChange} required>

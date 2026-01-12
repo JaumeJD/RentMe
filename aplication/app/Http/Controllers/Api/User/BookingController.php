@@ -23,16 +23,18 @@ class BookingController extends Controller
         // Validar datos mínimos
         $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'fecha_inicio' => 'required|date|after_or_equal:today',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
         ]);
 
-        // Verificar disponibilidad
-        $exists = Booking::where('vehicle_id', $request->vehicle_id)
+        $start = $data['fecha_inicio'];
+        $end   = $data['fecha_fin'];
+
+        $exists = Booking::where('vehicle_id', $data['vehicle_id'])
             ->whereIn('estado', ['confirmada', 'activa'])
-            ->where(function ($q) use ($request) {
-                $q->whereBetween('fecha_inicio', [$request->fecha_inicio, $request->fecha_fin])
-                  ->orWhereBetween('fecha_fin', [$request->fecha_inicio, $request->fecha_fin]);
+            ->where(function ($q) use ($start, $end) {
+                $q->where('fecha_inicio', '<=', $end)
+                ->where('fecha_fin', '>=', $start);
             })
             ->exists();
 
@@ -65,15 +67,23 @@ class BookingController extends Controller
             return response()->json(['message' => 'No autorizado'], 403);
         }
 
-        // Validar disponibilidad si se cambia el vehículo o fechas
-        $exists = Booking::where('vehicle_id', $request->vehicle_id ?? $booking->vehicle_id)
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'fecha_inicio' => 'required|date|after_or_equal:today',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'estado' => 'sometimes|in:pendiente,confirmada,activa,finalizada,cancelada'
+        ]);
+
+        $start = $data['fecha_inicio'];
+        $end   = $data['fecha_fin'];
+
+        $exists = Booking::where('vehicle_id', $data['vehicle_id'])
+            ->where('id', '!=', $booking->id)
             ->whereIn('estado', ['confirmada', 'activa'])
-            ->where('id', '!=', $booking->id) // ignorar esta reserva
-            ->where(function ($q) use ($request, $booking) {
-                $start = $request->fecha_inicio ?? $booking->fecha_inicio;
-                $end = $request->fecha_fin ?? $booking->fecha_fin;
-                $q->whereBetween('fecha_inicio', [$start, $end])
-                  ->orWhereBetween('fecha_fin', [$start, $end]);
+            ->where(function ($q) use ($start, $end) {
+                $q->where('fecha_inicio', '<=', $end)
+                ->where('fecha_fin', '>=', $start);
             })
             ->exists();
 

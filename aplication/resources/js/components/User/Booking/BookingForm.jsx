@@ -9,6 +9,7 @@ export default function BookingForm({ booking = null, onSuccess }) {
   });
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Cargar vehículos disponibles
   useEffect(() => {
@@ -49,7 +50,13 @@ export default function BookingForm({ booking = null, onSuccess }) {
       alert("Reserva guardada correctamente");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Error al guardar reserva");
+
+      const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+        "Error desconocido al guardar la reserva";
+
+      alert(message);
     } finally {
       setLoading(false);
     }
@@ -57,6 +64,7 @@ export default function BookingForm({ booking = null, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h3>{booking ? "Editar reserva" : "Nueva reserva"}</h3>
       <select name="vehicle_id" value={form.vehicle_id} onChange={handleChange} required>
         <option value="">Selecciona un vehículo</option>
         {vehicles.map(v => (

@@ -16,6 +16,11 @@
   padding: 1rem;
 }
 
+.error {
+  color: red;
+  font-weight: bold;
+}
+
 .footer {
   position: sticky;
   bottom: 0;

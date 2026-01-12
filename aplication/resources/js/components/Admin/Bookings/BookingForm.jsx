@@ -14,6 +14,7 @@ export default function BookingForm({ booking = null, onSaved }) {
   const [users, setUsers] = useState([]);
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
 
@@ -84,15 +85,24 @@ export default function BookingForm({ booking = null, onSaved }) {
 
     } catch (err) {
       console.error(err);
-      alert("Error al guardar reserva");
+
+      const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+        "Error desconocido al guardar la reserva";
+
+      setError(message);
+
     } finally {
       setLoading(false);
     }
   };
 
   return (
+    
     <form onSubmit={handleSubmit} style={{ marginBottom: 20 }}>
       <h3>{booking ? "Editar reserva" : "Nueva reserva"}</h3>
+      {error && <p className="error">{error}</p>}
 
       {/* Usuario */}
       <select name="user_id" value={form.user_id} onChange={handleChange} required>

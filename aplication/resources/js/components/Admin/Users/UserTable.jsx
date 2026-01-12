@@ -41,7 +41,10 @@ export default function UserTable() {
     <div>
       <button onClick={handleCreate}>Nuevo Usuario</button>
       {creating && <UserForm />}
-      {editingUser && <UserForm user={editingUser} />}
+      {editingUser && <UserForm user={editingUser} onSuccess={()=>{
+        setEditingUser(null);
+        fetchUsers();
+      }}/>}
       <table border="1" cellPadding="8">
         <thead>
           <tr>

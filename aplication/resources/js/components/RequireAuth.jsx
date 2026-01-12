@@ -3,7 +3,12 @@ import { AuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 export default function RequireAuth({ role, children }) {
-  const { user, isAuthenticated } = useContext(AuthContext);
+  
+  const { user, loading, isAuthenticated } = useContext(AuthContext);
+
+  if (loading) {
+    return <div>Cargando...</div>
+  }
 
   if (!isAuthenticated) return <Navigate to="/login" />;
   

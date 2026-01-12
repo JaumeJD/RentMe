@@ -23,10 +23,10 @@ const VehicleDetailPage = () => {
       <img src={vehicle.images?.[0]?.image_url} />
       <h1>{vehicle.marca}</h1>
       <h2>{vehicle.modelo}</h2>
-      <p>Año: {vehicle.anio}€</p>
-      <p>Estado: {vehicle.estado}€</p>
-      <p>Matrícula: {vehicle.matricula}€</p>
-      <p>Kilometraje: {vehicle.kilometros}€</p>
+      <p>Año: {vehicle.anio}</p>
+      <p>Estado: {vehicle.estado}</p>
+      <p>Matrícula: {vehicle.matricula}</p>
+      <p>Kilometraje: {vehicle.kilometros}</p>
       <p>Precio/día: {vehicle.precio_dia}€</p>
       <p>Precio/mes: {vehicle.precio_mes}€</p>
       <p>Combustible: {vehicle.combustible}</p>
