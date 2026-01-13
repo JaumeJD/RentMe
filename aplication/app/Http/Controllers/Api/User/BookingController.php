@@ -21,10 +21,11 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         // Validar datos mínimos
-        $request->validate([
+        $data = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
             'fecha_inicio' => 'required|date|after_or_equal:today',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio'
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'precio_total' => 'numeric|min:0'
         ]);
 
         $start = $data['fecha_inicio'];
@@ -40,19 +41,15 @@ class BookingController extends Controller
 
         if ($exists) {
             return response()->json([
-                'message' => 'El vehículo ya está reservado en esas fechas'
+                'message' => 'El vehículo ya está reservado en esa fecha.'
             ], 422);
         }
 
         // Crear la reserva con el usuario autenticado
-        $booking = Booking::create([
-            'user_id' => $request->user()->id, // <-- aquí asignamos el usuario
-            'vehicle_id' => $request->vehicle_id,
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
-            'precio_total' => $request->precio_total,
+        $booking = Booking::create(array_merge($data, [
+            'user_id' => $request->user()->id,
             'estado' => 'confirmada',
-        ]);
+        ]));
 
         return response()->json($booking->load('vehicle'), 201);
     }
@@ -68,7 +65,6 @@ class BookingController extends Controller
         }
 
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'vehicle_id' => 'required|exists:vehicles,id',
             'fecha_inicio' => 'required|date|after_or_equal:today',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',

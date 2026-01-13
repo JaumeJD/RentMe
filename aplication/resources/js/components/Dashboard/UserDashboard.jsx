@@ -17,7 +17,7 @@ export default function UserDashboard() {
   useEffect(() => { fetchUser(); }, []);
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div>
       <h1>Panel de Usuario</h1>
 
       <BookingTable userView />

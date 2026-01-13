@@ -48,7 +48,7 @@ class VehicleController extends Controller
 
             'observaciones' => 'nullable|string|max:2000',
 
-            'images' => 'nullable|array',
+            'images' => 'nullable',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp',
         ]);
 
@@ -95,7 +95,7 @@ class VehicleController extends Controller
 
             'observaciones' => 'nullable|string|max:2000',
 
-            'images' => 'nullable|array',
+            'images' => 'nullable',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp',
         ]);
     

@@ -56,7 +56,7 @@ export default function BookingForm({ booking = null, onSuccess }) {
         Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
         "Error desconocido al guardar la reserva";
 
-      alert(message);
+        setError(message);
     } finally {
       setLoading(false);
     }
@@ -64,6 +64,7 @@ export default function BookingForm({ booking = null, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      {error && <p className="error">{error}</p>}
       <h3>{booking ? "Editar reserva" : "Nueva reserva"}</h3>
       <select name="vehicle_id" value={form.vehicle_id} onChange={handleChange} required>
         <option value="">Selecciona un vehículo</option>

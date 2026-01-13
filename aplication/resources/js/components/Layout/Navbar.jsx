@@ -3,55 +3,55 @@ import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/");
-  }
+  };
 
   return (
-    <nav style={{ padding: "1rem", background: "#222", color: "#fff" }}>
-      <>
-      <Link to="/" style={{ marginRight: "1rem", color: "#fff" }}>
-        ICONO
-      </Link>
-      </>
+    <nav className="navbar">
+      {/* Logo */}
+      <div className="logo">
+        <Link to="/">
+          <img src="/icono.png" alt="logo" style={{width: 80, height: 80}}/>
+        </Link>
+      </div>
 
+      {/* Menú cuando no hay usuario */}
       {!user && (
-        <>
-        <Link to="/login" style={{ color: "#fff" }}>Login</Link>
-        <span style={{ margin: "0 0.5rem" }}>|</span>
-        <Link to="/register" style={{ color: "#fff" }}>Register</Link>
-        <span style={{ margin: "0 0.5rem" }}>|</span>
-        <Link to="/contact" style={{ marginRight: "1rem", color: "#fff" }}>
-          Contacto
-        </Link>
-        </>
+        <div className="flex gap-4 items-center">
+          <Link to="/">Inicio</Link>
+          <Link to="/login">Login</Link>
+          <Link to="/register">Register</Link>
+          <Link to="/contact">Contacto</Link>
+        </div>
       )}
 
+      {/* Menú cliente */}
       {user?.role === "client" && (
-        <>
-        <Link to="/dashboard" style={{ color: "white" }}>{user.name}</Link>
-        <span style={{ margin: "0 0.5rem" }}>|</span>
-        <Link to="/contact" style={{ marginRight: "1rem", color: "#fff" }}>
-          Contacto
-        </Link>
-        <button onClick={handleLogout}>Cerrar sesión</button>
-        </>
+        <div className="flex gap-4 items-center">
+          <Link to="/">Inicio</Link>
+          <Link to="/dashboard">{user.name}</Link>
+          <Link to="/contact">Contacto</Link>
+          <button className="btn-primary" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
+        </div>
       )}
 
+      {/* Menú admin */}
       {user?.role === "admin" && (
-        <>
-        <Link to="/admin" style={{ color: "white" }}>Admin</Link>
-        <span style={{ margin: "0 0.5rem" }}>|</span>
-        <Link to="/" style={{ marginRight: "1rem", color: "#fff" }}>
-          Inicio
-        </Link>
-        <button onClick={handleLogout}>Cerrar sesión</button>
-        </>
+        <div className="flex gap-4 items-center">
+          <Link to="/">Inicio</Link>
+          <Link to="/admin">{user.name}</Link>
+          <Link to="/contact">Contacto</Link>
+          <button className="btn-primary" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
+        </div>
       )}
     </nav>
   );

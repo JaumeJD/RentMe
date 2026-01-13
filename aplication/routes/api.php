@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Admin\BookingController;
 use App\Http\Controllers\Api\Admin\PaymentController;
 use App\Http\Controllers\Api\Admin\VehicleController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\VehiclePublicController;
 
 Route::prefix('v1')->group(function () {
     
@@ -17,15 +18,15 @@ Route::prefix('v1')->group(function () {
     //::public
     Route::get('/public/{slug}', [FrontController::class, 'vehiculo']);
     Route::get('/vehicles', [VehicleController::class, 'index']);
-    Route::get('/vehicles/{id}', [VehicleController::class, 'show']);
+    Route::get('/vehicles/{vehicle}', [FrontController::class, 'showPublic']);
     Route::post('/contact', [ContactController::class, 'store']);
     //::auth
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);
-
+    
     //PRIVATE ROUTES
     Route::group(['middleware' => 'auth:sanctum'], function () {
-
+        
         //::auth
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         //::rol user

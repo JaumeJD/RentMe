@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RentMe - LARAVEL/REACT</title>
     @vite("resources/js/app.js")
+    <link rel="icon" type="image/png" href="/icono.png" />
 </head>
 <body>
     <div id="root"></div>

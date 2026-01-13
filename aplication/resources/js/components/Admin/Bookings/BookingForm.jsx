@@ -100,7 +100,7 @@ export default function BookingForm({ booking = null, onSaved }) {
 
   return (
     
-    <form onSubmit={handleSubmit} style={{ marginBottom: 20 }}>
+    <form onSubmit={handleSubmit}>
       <h3>{booking ? "Editar reserva" : "Nueva reserva"}</h3>
       {error && <p className="error">{error}</p>}
 

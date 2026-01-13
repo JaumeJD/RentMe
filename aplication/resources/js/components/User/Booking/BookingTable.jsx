@@ -65,7 +65,6 @@ export default function BookingTable() {
       <table border="1" cellPadding="8">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Vehículo</th>
             <th>Fecha inicio</th>
             <th>Fecha fin</th>
@@ -77,7 +76,6 @@ export default function BookingTable() {
         <tbody>
           {bookings.map(b => (
             <tr key={b.id}>
-              <td>{b.id}</td>
               <td>{b.vehicle ? `${b.vehicle.marca} ${b.vehicle.modelo}` : "—"}</td>
               <td>{b.fecha_inicio}</td>
               <td>{b.fecha_fin}</td>

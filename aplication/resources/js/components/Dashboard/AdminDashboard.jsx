@@ -8,7 +8,7 @@ export default function DashboardAdmin() {
   const [activeTab, setActiveTab] = useState("vehicles")
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div>
       <h1>Dashboard de Administrador</h1>
       
       <nav>
@@ -17,7 +17,7 @@ export default function DashboardAdmin() {
         <button onClick={() => setActiveTab("bookings")}>Reservas</button>
       </nav>
 
-      <div style={{ marginTop: "2rem" }}>
+      <div>
         {activeTab === "vehicles" && <VehicleTable />}
         {activeTab === "users" && <UserTable />}
         {activeTab === "bookings" && <BookingTable />}

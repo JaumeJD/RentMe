@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Booking;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -19,10 +18,20 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        $data = $request->only(['name', 'email', 'phone']);
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'password' => 'nullable|min:6|confirmed',
+        ]);
 
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
         }
 
         $user->update($data);
