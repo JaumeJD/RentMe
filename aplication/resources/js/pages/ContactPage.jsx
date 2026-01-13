@@ -22,6 +22,7 @@ export default function ContactPage() {
     setSuccess("");
 
     try {
+      console.log(form);
       await axios.post("http://localhost:8000/api/v1/contact", form);
       setSuccess("Mensaje enviado correctamente ✅");
       setForm({ name: "", email: "", message: "" });
