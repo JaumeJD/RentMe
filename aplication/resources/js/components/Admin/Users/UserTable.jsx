@@ -7,6 +7,7 @@ export default function UserTable() {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
   const [creating, setCreating] = useState(false);
+  const [error, setError] = useState(null)
 
   const handleEdit = (user) => {
     setEditingUser(user);
@@ -46,6 +47,7 @@ export default function UserTable() {
         fetchUsers();
       }}/>}
       <table>
+        {error && <p className="error">{error}</p>}
         <thead>
           <tr>
             <th>ID</th>
