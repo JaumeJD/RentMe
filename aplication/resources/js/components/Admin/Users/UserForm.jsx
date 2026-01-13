@@ -40,7 +40,7 @@ export default function UserForm({ user = null }) {
       const message =
         err.response?.data?.message ||
         Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
-        "Error con el usuario introducido.";
+        "Error en los datos del usuario.";
 
       setError(message)
     } finally {

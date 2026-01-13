@@ -25,11 +25,33 @@ export default function VehicleForm({ vehicle = null }) {
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Si viene un vehículo (editar)
   useEffect(() => {
-    if (vehicle) setForm(vehicle);
-  }, [vehicle]);
+  if (vehicle) {
+    setForm(vehicle);
+  } else {
+    setForm({
+      marca: "",
+      modelo: "",
+      anio: "",
+      matricula: "",
+      bastidor: "",
+      tipo: "",
+      combustible: "",
+      transmision: "",
+      potencia: "",
+      kilometros: "",
+      asientos: "",
+      estado: "disponible",
+      precio_dia: "",
+      precio_mes: "",
+    });
+    setImages([]);
+  }
+}, [vehicle]);
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -79,7 +101,12 @@ export default function VehicleForm({ vehicle = null }) {
     navigate("/admin");
   } catch (err) {
     console.error(err.response?.data || err);
-    alert("Error al guardar vehículo");
+    const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+        "Error en los datos del vehículo.";
+
+    setError(message)
   } finally {
     setLoading(false);
   }
@@ -92,7 +119,7 @@ export default function VehicleForm({ vehicle = null }) {
   return (
     <form onSubmit={handleSubmit}>
       <h2>{vehicle ? "Editar vehículo" : "Nuevo vehículo"}</h2>
-
+      {error && <p className="error">{error}</p>}
       <input name="marca" placeholder="Marca" onChange={handleChange} value={form.marca} required/>
       <input name="modelo" placeholder="Modelo" onChange={handleChange} value={form.modelo} required/>
       <input type="number" name="anio" placeholder="Año" onChange={handleChange} value={form.anio} required/>

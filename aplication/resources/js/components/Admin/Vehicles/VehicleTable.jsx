@@ -7,6 +7,7 @@ const VehicleTable = () => {
   const [vehicles, setVehicles] = useState([]);
   const [editingVehicle, setEditingVehicle] = useState(null);
   const [creatingVehicle, setCreatingVehicle] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchVehicles = async () => {
     try {
@@ -45,6 +46,13 @@ const VehicleTable = () => {
       fetchVehicles();
     } catch (err) {
       console.error(err);
+      
+      const message =
+      err.response?.data?.message ||
+      Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+      "Error en los datos del usuario.";
+
+      setError(message)
     }
     fetchVehicles();
   };
@@ -54,7 +62,7 @@ const VehicleTable = () => {
       <h2>Vehículos</h2>
 
       <button onClick={handleCreate}>Nuevo Vehículo</button>
-
+      {error && <p className="error">{error}</p>}
       {/* Mostrar formulario solo si estamos creando o editando */}
       {(creatingVehicle || editingVehicle) && (
         <VehicleForm
