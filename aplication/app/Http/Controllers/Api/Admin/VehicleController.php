@@ -93,9 +93,6 @@ class VehicleController extends Controller
             'precio_dia' => 'nullable|numeric|min:0',
             'precio_mes' => 'nullable|numeric|gte:precio_dia',
 
-            'fecha_alta' => 'nullable|before_or_equal:today',
-            'fecha_baja' => 'nullable|after_or_equal:fecha_alta',
-
             'observaciones' => 'nullable|string|max:2000',
 
             'images' => 'nullable|array',

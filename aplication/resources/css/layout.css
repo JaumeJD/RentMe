@@ -4,6 +4,23 @@
   flex-direction: column;
 }
 
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  color: #111827;
+  background-color: #FFFFFF;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  color: #1e3b8a;
+}
+
+p, td, label {
+  font-weight: 400;
+  color: #6B7280;
+}
+
+
 .navbar {
   position: sticky;
   top: 0;
