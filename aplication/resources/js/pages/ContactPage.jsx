@@ -10,6 +10,7 @@ export default function ContactPage() {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,8 +25,15 @@ export default function ContactPage() {
       await axios.post("http://localhost:8000/api/v1/contact", form);
       setSuccess("Mensaje enviado correctamente ✅");
       setForm({ name: "", email: "", message: "" });
-    } catch (error) {
-      alert("Error al enviar mensaje");
+    } catch (err) {
+      console.error(err);
+
+      const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+        "Error desconocido al guardar la reserva";
+
+        setError(message);
     } finally {
       setLoading(false);
     }
@@ -37,6 +45,7 @@ export default function ContactPage() {
       <p>¿Tienes alguna duda? Escríbenos.</p>
 
       <form onSubmit={handleSubmit} className="contact-form">
+        {error && <p className="error">{error}</p>}
         <input
           name="name"
           placeholder="Nombre"

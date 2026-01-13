@@ -20,7 +20,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/public/{slug}', [FrontController::class, 'vehiculo']);
     Route::get('/vehicles', [VehicleController::class, 'index']);
     Route::get('/vehicles/{vehicle}', [FrontController::class, 'showPublic']);
-    Route::post('/contact', [ContactController::class, 'store']);
+    Route::post('/contact', [ContactController::class, 'send']);
     //::auth
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post('/auth/login', [AuthController::class, 'login']);

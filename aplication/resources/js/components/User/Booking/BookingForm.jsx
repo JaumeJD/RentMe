@@ -56,7 +56,7 @@ export default function BookingForm({ booking = null, onSuccess }) {
         Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
         "Error desconocido al guardar la reserva";
 
-        setError(message);
+        setError(message)
     } finally {
       setLoading(false);
     }
