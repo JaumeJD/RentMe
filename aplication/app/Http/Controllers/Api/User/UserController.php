@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -16,16 +18,14 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+
         $user = $request->user();
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'password' => 'nullable|min:6|confirmed',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6',
+            'phone' => 'nullable|string|max:20'
         ]);
 
         if (!empty($data['password'])) {

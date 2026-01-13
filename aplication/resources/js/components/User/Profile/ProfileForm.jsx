@@ -11,6 +11,7 @@ export default function ProfileForm({ user, onSuccess }) {
   });
   
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Actualiza el formulario cuando cambia el usuario
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function ProfileForm({ user, onSuccess }) {
         name: user.name || "",
         email: user.email || "",
         phone: user.phone || "",
-        password: "", // siempre vacío
+        password: "",
       });
     }
   }, [user]);
@@ -30,15 +31,33 @@ export default function ProfileForm({ user, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // Crear payload solo con lo necesario
+    const payload = {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+    };
+
+    // Solo incluir contraseña si el usuario ingresó algo
+    if (form.password) {
+      payload.password = form.password;
+    }
+
     try {
-      await axios.put("http://localhost:8000/api/v1/user/profile", form, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      const res = await axios.put("http://localhost:8000/api/v1/user/profile", payload, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      onSuccess();
       alert("Perfil actualizado");
+      onSuccess(res.data);
     } catch (err) {
       console.error(err);
-      alert("Error al actualizar perfil");
+      const message =
+        err.response?.data?.message ||
+        Object.values(err.response?.data?.errors || {})?.[0]?.[0] ||
+        "Error desconocido al guardar la reserva";
+
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -46,37 +65,38 @@ export default function ProfileForm({ user, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h3>Editar perfil</h3>
       <input
         name="name"
-        value={form.name ?? ""}
+        value={form.name}
         onChange={handleChange}
         placeholder="Nombre"
         required
       />
       <input
         name="email"
-        value={form.email ?? ""}
+        value={form.email}
         onChange={handleChange}
         placeholder="Email"
         required
       />
       <input
         name="phone"
-        value={form.phone ?? ""}
+        value={form.phone}
         onChange={handleChange}
         placeholder="Teléfono"
       />
       <input
         type="password"
         name="password"
-        value={form.password ?? ""}
+        value={form.password}
         onChange={handleChange}
-        placeholder="Contraseña"
+        placeholder="Nueva contraseña (opcional)"
       />
+      {error && <p className="error">{error}</p>}
       <button disabled={loading}>
         {loading ? "Guardando..." : "Guardar"}
       </button>
     </form>
   );
 }
-

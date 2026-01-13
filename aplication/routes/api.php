@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FrontController;
 use App\Http\Controllers\Api\User\BookingController as BookingUser;
+use App\Http\Controllers\Api\User\UserController as ProfileUser;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\BookingController;
 use App\Http\Controllers\Api\Admin\PaymentController;
@@ -30,8 +31,8 @@ Route::prefix('v1')->group(function () {
         //::auth
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         //::rol user
-        Route::get('/user/profile', [UserController::class, 'show']); //Obtener datos de usuario
-        Route::put('/user/profile', [UserController::class, 'update']); //Actualizar datos de usuario
+        Route::get('/user/profile', [ProfileUser::class, 'show']);
+        Route::put('/user/profile', [ProfileUser::class, 'update']);
         Route::apiResource('/user/bookings', BookingUser::class); //CRUD de sus reservas
         //::rol admin
         Route::apiResource('/admin/users', UserController::class);
